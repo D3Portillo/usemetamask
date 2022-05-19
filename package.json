@@ -1,0 +1,25 @@
+{
+  "name": "usemetamask",
+  "license": "MIT",
+  "author": {
+    "name": "Denny Portillo"
+  },
+  "description": "Utility React hook to handle Metamask's browser API",
+  "keywords": [
+    "usemetamask",
+    "react",
+    "metamask",
+    "wallet",
+    "cryto",
+    "web3"
+  ],
+  "bugs": {
+    "url": "https://github.com/D3Portillo/usemetamask/issues"
+  },
+  "homepage": "https://github.com/D3Portillo/usemetamask",
+  "repository": "D3Portillo/usemetamask",
+  "files": [
+    "dist"
+  ],
+  "version": "0.0.0"
+}
