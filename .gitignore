@@ -3,4 +3,6 @@ node_modules
 package-lock.json
 www
 package
+TODO.md
 use*.tgz
+forta*.tgz
