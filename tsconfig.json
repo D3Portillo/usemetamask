@@ -1,0 +1,16 @@
+{
+  "include": ["lib", "playground/lib.dev.ts"],
+  "compilerOptions": {
+    "typeRoots": ["./global.d.ts"],
+    "lib": ["dom", "esnext"],
+    "target": "esnext",
+    "module": "esnext",
+    "sourceMap": false,
+    "incremental": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  }
+}
