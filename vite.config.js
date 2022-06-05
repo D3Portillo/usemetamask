@@ -12,13 +12,16 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     minify: "esbuild",
-    chunkSizeWarningLimit: 1,
+    chunkSizeWarningLimit: 4,
     rollupOptions: {
+      treeshake: true,
       external: ["react"],
       output: {
         globals: {
           react: "React",
         },
+        minifyInternalExports: true,
+        compact: true,
       },
     },
   },
@@ -28,6 +31,5 @@ export default defineConfig({
     minifyIdentifiers: true,
     minifyWhitespace: true,
     treeShaking: true,
-    mangleProps: /.*_.*/g,
   },
 })
