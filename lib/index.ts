@@ -6,9 +6,7 @@ export {
   getMetamaskProvider,
   switchEtherNetwork,
   switchOrAppendNetwork,
-  etherSend,
-  etherRequest,
+  metamaskRequest,
+  sendEther,
   parse,
 } from "./utils"
-
-export { default as NETWORK } from "./NETWORK"

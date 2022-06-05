@@ -1,38 +1,65 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Metamask, SendBasicProps, UseMatamaskAPI } from "./shared.d"
-import { getMetamaskProvider, etherSend } from "./utils"
+import { getMetamaskProvider, sendEther, parse } from "./utils"
+import { STR_FALSE, STR_TRUE, EVENTS } from "./utils/constants"
 import {
   setStoreState,
-  userIsForceDisconnected,
   connectToMetamask,
+  userIsForceDisconnected,
+  noOp,
 } from "./utils/helpers"
-import { STR_FALSE, STR_TRUE, EVENTS } from "./utils/constants"
 
 const ACCOUNTS_CHANGED = "accountsChanged"
-export function useMetamask(): UseMatamaskAPI {
+const ON_DISCONNECT = "disconnect"
+const ONE_MINUTE_IN_MS = 60000
+const EMPTY_BALANCE = "0.00"
+function useMetamask(onMetamaskHook): UseMatamaskAPI {
   const [error, setError] = useState(null)
   const [metamask, setMetamask] = useState<Metamask>({} as any)
+  const [triggerRefetch, setTriggerRefetch] = useState(0)
   const [accounts, setAccounts] = useState([])
   const [account, setAccount] = useState(null)
+  const [balance, setBalance] = useState(EMPTY_BALANCE)
+  const timer = useRef(null)
 
+  const resetError = () => setError(null)
   const handleError = (err) => {
     console.error(`useMetamask::Error`, err)
     setError(err)
   }
 
+  const disconnect = (__props) => {
+    const props = __props || {}
+    setStoreState(STR_TRUE)
+    setAccounts([])
+    props.reload && window.location.reload()
+  }
+
   useEffect(() => {
     const metamask = getMetamaskProvider()
+    let hookCleanerFn = undefined
     function handleEventError(e) {
       e.detail && handleError(e.detail)
+    }
+    function handleDisconnect() {
+      disconnect({
+        reload: true,
+      })
     }
     if (metamask) {
       setMetamask(metamask)
       metamask.on(ACCOUNTS_CHANGED, setAccounts)
+      metamask.on(ON_DISCONNECT, handleDisconnect)
       metamask.request({ method: "eth_accounts" }).then(setAccounts)
+      hookCleanerFn = onMetamaskHook ? onMetamaskHook(metamask) : noOp
     }
     window.addEventListener(EVENTS.ON_METAMASK_ERROR, handleEventError)
     return () => {
-      metamask && metamask.removeListener(ACCOUNTS_CHANGED, setAccounts)
+      hookCleanerFn() // Execute onMetamaskHook cleaning fn
+      if (metamask) {
+        metamask.removeListener(ACCOUNTS_CHANGED, setAccounts)
+        metamask.removeListener(ON_DISCONNECT, handleDisconnect)
+      }
       window.removeEventListener(EVENTS.ON_METAMASK_ERROR, handleEventError)
     }
   }, [])
@@ -48,8 +75,30 @@ export function useMetamask(): UseMatamaskAPI {
     setError(null)
   }, [accounts, account])
 
-  const proxiedSend = ({ to, value }: SendBasicProps) => {
-    return etherSend({
+  useEffect(() => {
+    if (metamask && account) {
+      clearTimeout(timer.current)
+      metamask
+        .request({
+          method: "eth_getBalance",
+          params: [account, "latest"],
+        })
+        .then((value) => {
+          console.info("useMetamask::eth_getBalance#refetch")
+          setBalance(parse.txWeiToEth(value).toFixed(2))
+          timer.current = setTimeout(
+            () => setTriggerRefetch((n) => n + 1),
+            ONE_MINUTE_IN_MS * 3
+          )
+        })
+        .catch(noOp)
+    }
+    return () => clearTimeout(timer.current)
+  }, [accounts, account, error, triggerRefetch])
+
+  const proxiedSend = ({ to, value, ...extra }: SendBasicProps) => {
+    return sendEther({
+      ...extra,
       from: account,
       to,
       value,
@@ -65,23 +114,19 @@ export function useMetamask(): UseMatamaskAPI {
       .catch(handleError)
   }
 
-  const disconnect = (__props) => {
-    const props = __props || {}
-    setStoreState(STR_TRUE)
-    setAccounts([])
-    props.reload && window.location.reload()
-  }
-
   const chainId = metamask.chainId ? metamask.chainId : "0x0"
+  const isConnected = typeof account === "string"
   return {
     send: proxiedSend,
-    isConnected: typeof account === "string",
+    isConnected,
     chainIdDecimal: parseInt(chainId),
     chainId,
     metamask,
+    balance: isConnected ? balance : EMPTY_BALANCE,
     connect: proxiedConnect,
     disconnect,
     account,
+    resetError,
     error,
     accounts,
   }
