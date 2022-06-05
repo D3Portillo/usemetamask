@@ -1,10 +1,10 @@
 export const METHODS = {
-  wallet_watchAsset: "wallet_watchAsset",
-  wallet_switchEthereumChain: "wallet_switchEthereumChain",
-  wallet_addEthereumChain: "wallet_addEthereumChain",
-  eth_requestAccounts: "eth_requestAccounts",
-  eth_sendTransaction: "eth_sendTransaction",
-  eth_accounts: "eth_accounts",
+  WALLET_WATCH_ASSET: "wallet_watchAsset",
+  WALLET_SWITCH_ETHER_CHAIN: "wallet_switchEthereumChain",
+  WALLET_ADD_ETHER_CHAIN: "wallet_addEthereumChain",
+  ETH_REQUEST_ACCOUNTS: "eth_requestAccounts",
+  ETH_SEND_TRANSACTION: "eth_sendTransaction",
+  ETH_ACCOUNTS: "eth_accounts",
 } as const
 
 export const ERRORS = {
