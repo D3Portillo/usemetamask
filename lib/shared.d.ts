@@ -1,4 +1,4 @@
-// * Atomic shared type definitions
+// * Library shared type definitions
 // REF: https://docs.metamask.io
 interface ErrorState {
   message: string
@@ -20,19 +20,21 @@ interface ConnectInfo {
   chainId: string
 }
 
-interface SendMethodProps {
-  gasPrice?: string
-  gas?: string
+interface SendBasicProps {
+  /** Address to send */
   to: string
-  from: string
+  /** Hex formated wei amount to send */
   value: string
-  data?: string
-  chainId?: string
 }
 
-interface SendBasicProps {
-  to: string
-  value: string
+interface SendMethodProps extends SendBasicProps {
+  gasPrice?: string
+  /** Optional. Metamask UI will be prompted */
+  gas?: string
+  from: string
+  data?: string
+  /** Optional. Metamask will replace it's value */
+  chainId?: string
 }
 
 interface Asset {
@@ -47,7 +49,7 @@ interface WatchAssetParams {
   options: Asset
 }
 
-interface AddEthereumChainParameter {
+interface AddEthereumChain {
   chainId: string
   chainName: string
   nativeCurrency?: {
@@ -59,67 +61,55 @@ interface AddEthereumChainParameter {
   blockExplorerUrls?: string[]
 }
 
-interface SwitchEthereumChainParameter {
+interface SwitchEthereumChain {
   chainId: string
 }
 
 // * metamask.request() typing
-// [type of request]: [on resolve return type]
-interface RequestOnResolve {
-  wallet_watchAsset: boolean
-  wallet_switchEthereumChain: null
-  wallet_addEthereumChain: null
-  eth_requestAccounts: string[]
-  eth_accounts: [string][]
-  eth_sendTransaction: string[]
-}
-// [type of request]: [expected request params]
-interface RequestParams {
-  wallet_watchAsset: WatchAssetParams
-  wallet_switchEthereumChain: SwitchEthereumChainParameter[]
-  wallet_addEthereumChain: AddEthereumChainParameter[]
-  eth_requestAccounts: never
-  eth_accounts: never
-  eth_sendTransaction: SendMethodProps[]
-}
-type RequestMethodsEnum = keyof RequestOnResolve
-interface RequestProps<T> {
+interface RequestProps<T, D> {
   method: T
-  params?: RequestParamsType<T>
+  params: D
 }
-type RequestParamsType<T> = T extends RequestMethodsEnum
-  ? RequestParams[T]
-  : never
-type ReqMethodsType<T> = T extends RequestMethodsEnum
-  ? RequestOnResolve[T]
-  : never
+
+type TransactionType = "latest" | "earliest" | "pending"
+interface OnRequest {
+  request(
+    p: RequestProps<"wallet_watchAsset", WatchAssetParams>
+  ): Promise<boolean>
+  request(
+    p: RequestProps<"wallet_switchEthereumChain", SwitchEthereumChain[]>
+  ): Promise<null>
+  request(
+    p: RequestProps<"wallet_addEthereumChain", AddEthereumChain[]>
+  ): Promise<null>
+  request(p: { method: "eth_requestAccounts" }): Promise<string[]>
+  request(p: { method: "eth_accounts" }): Promise<[string][]>
+  request(
+    p: RequestProps<"eth_sendTransaction", SendMethodProps[]>
+  ): Promise<string[]>
+  /** Get Address ETH balance in wei */
+  request(
+    p: RequestProps<"eth_getBalance", [string, TransactionType]>
+  ): Promise<string>
+}
 
 // * metamask.on() typing
-// [event]: [callback prop type]
-interface EventTypeProps {
-  accountsChanged: string[]
-  chainChanged: string
-  disconnect: ProviderRpcError
-  message: ProviderMessage
-  connect: ConnectInfo
+type EventCallback<T> = (data: T) => void
+interface OnEvent {
+  on(ev: "accountsChanged", cb: EventCallback<string[]>): void
+  on(ev: "chainChanged", cb: EventCallback<string>): void
+  on(ev: "disconnect", cb: EventCallback<ProviderRpcError>): void
+  on(ev: "message", cb: EventCallback<ProviderMessage>): void
+  on(ev: "connect", cb: EventCallback<ConnectInfo>): void
 }
-type EventTypePropsEnum = keyof EventTypeProps
-type EventDataType<T> = T extends EventTypePropsEnum ? EventTypeProps[T] : never
-type OnEventCallback<T> = (data: EventDataType<T>) => void
 
-// * Exposed types
+// * Exported types
 export interface WithErrorState {
   error?: ErrorState
 }
 
-export type RequestFn = <T extends RequestMethodsEnum>(
-  prop: RequestProps<T>
-) => Promise<ReqMethodsType<T>>
-
-export interface Metamask {
+export interface Metamask extends OnEvent, OnRequest {
   isConnected(): boolean
-  request: RequestFn
-  on<T extends EventTypePropsEnum>(type: T, cb: OnEventCallback<T>): void
   /**
    * alias to `ethereum._metamask.isUnlocked()`
    *
@@ -128,16 +118,18 @@ export interface Metamask {
    */
   isUserUnlocked(): Promise<boolean>
   chainId: string
-  removeListener: (e: EventTypePropsEnum, f: any) => void
+  removeListener: (e: string, f: any) => void
   selectedAddress: string | null
 }
 
 export interface UseMatamaskAPI {
   connect: () => void
-  disconnect: (props?: { reload?: boolean = false }) => void
-  send: (props: SendMethodProps) => Promise<string>
+  disconnect: (props?: { reload?: boolean }) => void
+  send: (props: Omit<SendMethodProps, "from">) => Promise<string>
+  resetError: () => void
   account: string
   accounts: string[]
+  balance: string
   chainId: string
   chainIdDecimal: number
   error?: ErrorState
