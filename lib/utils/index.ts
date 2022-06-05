@@ -2,10 +2,10 @@
  * Library exported utilities
  */
 import { METHODS } from "./constants"
-import { Asset, RequestProps, SendBasicProps } from "../shared.d"
-import { runIfMetamask, withError } from "./helpers"
+import { Asset, SendBasicProps } from "../shared.d"
+import { withError, runIfMetamask, getMetamaskProvider } from "./helpers"
 
-export { getMetamaskProvider } from "./helpers"
+export { getMetamaskProvider }
 
 export const addEtherToken = ({
   address,
@@ -19,7 +19,7 @@ export const addEtherToken = ({
   return runIfMetamask((metamask) => {
     return metamask
       .request({
-        method: METHODS.wallet_watchAsset,
+        method: METHODS.WALLET_WATCH_ASSET,
         params: {
           type: "ERC20",
           options: {
@@ -34,7 +34,7 @@ export const addEtherToken = ({
   })
 }
 
-export const switchOrAppendNetwork = async ({
+export const switchOrAppendNetwork = ({
   chainId,
   chainName,
   rpcUrl,
@@ -45,7 +45,7 @@ export const switchOrAppendNetwork = async ({
   return runIfMetamask(async (metamask) => {
     return metamask
       .request({
-        method: METHODS.wallet_switchEthereumChain,
+        method: METHODS.WALLET_SWITCH_ETHER_CHAIN,
         params: [{ chainId }],
       })
       .catch((error) => {
@@ -68,7 +68,7 @@ export const switchEtherNetwork = (chainId: string): Promise<null> => {
   return runIfMetamask((metamask) => {
     return metamask
       .request({
-        method: METHODS.wallet_switchEthereumChain,
+        method: METHODS.WALLET_SWITCH_ETHER_CHAIN,
         params: [{ chainId }],
       })
       .catch(withError)
@@ -86,7 +86,7 @@ export const addEtherNetwork = ({
   return runIfMetamask((metamask) => {
     metamask
       .request({
-        method: METHODS.wallet_addEthereumChain,
+        method: METHODS.WALLET_ADD_ETHER_CHAIN,
         params: [
           {
             chainName,
@@ -108,13 +108,13 @@ export const addEtherNetwork = ({
   })
 }
 
-export const etherRequest = (props: RequestProps<any>) => {
+export const metamaskRequest = (props) => {
   return runIfMetamask((metamask) => {
     return metamask.request(props).catch(withError)
   })
 }
 
-export const etherSend = ({
+export const sendEther = ({
   from,
   to,
   value,
@@ -122,7 +122,7 @@ export const etherSend = ({
   return runIfMetamask((metamask) => {
     return metamask
       .request({
-        method: METHODS.eth_sendTransaction,
+        method: METHODS.ETH_SEND_TRANSACTION,
         params: [
           {
             from,
@@ -143,5 +143,9 @@ export const parse = {
     }
     return `0x${n.toString(16).toUpperCase()}`
   },
-  toInt: (str: string) => parseInt(str, 16),
+  hexToInt: (str: string) => parseInt(str, 16),
+  toWei: (n: number) => n * 10 ** 18,
+  toTxWei: (n: number) => parse.toHex(parse.toWei(n)),
+  weiToEth: (n: number) => n * 10 ** -18,
+  txWeiToEth: (s: string) => parse.weiToEth(parse.hexToInt(s)),
 }
