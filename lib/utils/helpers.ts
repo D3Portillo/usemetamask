@@ -43,6 +43,14 @@ export const runIfMetamask = (
   return cb(metamask)
 }
 
+export const connectToMetamask = (): Promise<string> => {
+  return runIfMetamask((metamask) => {
+    return metamask
+      .request({ method: METHODS.ETH_REQUEST_ACCOUNTS })
+      .then(([account]) => account)
+  }, false)
+}
+
 export const getMetamaskProvider = () => {
   const metamask = getGlobalWindow()[ETHEREUM]
   if (metamask && metamask["isMetaMask"]) {
@@ -52,10 +60,4 @@ export const getMetamaskProvider = () => {
   return null
 }
 
-export const connectToMetamask = (): Promise<string> => {
-  return runIfMetamask((metamask) => {
-    return metamask
-      .request({ method: METHODS.eth_requestAccounts })
-      .then(([account]) => account)
-  }, false)
-}
+export const noOp = () => null
