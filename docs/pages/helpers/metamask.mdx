@@ -1,0 +1,101 @@
+## addEtherNetwork
+
+```jsx
+import { addEtherNetwork } from "@forta/usemetamask"
+// ..
+
+const Matic = {
+  chainId: "0x89",
+  chainName: "Matic Mainnet",
+  rpcUrl: "https://rpc-mainnet.maticvigil.com",
+  blockExplorerUrl: "https://explorer.matic.network",
+  symbol: "MATIC",
+}
+
+// invoke anywhere, will execute only if provider exists and isMetamask
+addEtherNetwork(Matic)
+```
+
+## addEtherToken
+
+```jsx
+import { addEtherToken } from "@forta/usemetamask"
+// ..
+
+addEtherToken({
+  address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+  symbol: "USDT",
+})
+```
+
+## getMetamaskProvider
+
+```jsx
+import { getMetamaskProvider } from "@forta/usemetamask"
+// ..
+
+// returns window.ethereum API with ts definitions
+const provider = getMetamaskProvider()
+if (provider) {
+  // null if window.ethereum `undefined` Or `isMetamask == false`
+  console.log(`isMetamask: ${provider.isMetaMask}`)
+}
+```
+
+## switchEtherNetwork
+
+```jsx
+import { switchEtherNetwork } from "@forta/usemetamask"
+// ..
+
+const GoerliChainId = "0x5"
+switchEtherNetwork(GoerliChainId)
+```
+
+## switchOrAppendNetwork
+
+This helper does the following:
+
+1. Tries to Switch to the Network `chainId`
+2. If Switch fails then we try to append Network to Metamask
+3. If Network was added succesfully it switches to the desired Network
+
+```jsx
+import { switchOrAppendNetwork } from "@forta/usemetamask"
+// ..
+
+const Matic = {
+  chainId: "0x89",
+  chainName: "Matic Mainnet",
+  rpcUrl: "https://rpc-mainnet.maticvigil.com",
+  blockExplorerUrl: "https://explorer.matic.network",
+  currencySymbol: "MATIC",
+}
+switchOrAppendNetwork(Matic)
+```
+
+## sendEther
+
+```jsx
+import { sendEther } from "@forta/usemetamask"
+// ..
+
+sendEther({
+  from: "0x3c0e20fCA6d2E084127D056377a5f35294503447",
+  to: "0x3c0e20fCA6d2E084127D056377a5f35294503447",
+  value: parse.toTxWei(0.5) /* 0.5 in ETH */,
+})
+```
+
+## metamaskRequest
+
+It validates if Metamask exists in global and resolves with it's `window.ethereum.request` function.
+
+```jsx
+import { metamaskRequest } from "@forta/usemetamask"
+// ..
+
+metamaskRequest({
+  method: "eth_requestAccounts",
+})
+```
