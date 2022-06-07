@@ -1,6 +1,8 @@
-# Parse - Helper functions
+---
+title: "useMetamask:: Parse nano-module"
+---
 
-## Parse number to HEX
+## Number to HEX
 
 ```jsx
 import { parse } from "@forta/usemetamask"
@@ -9,7 +11,7 @@ import { parse } from "@forta/usemetamask"
 parse.toHex(22) // "0x16"
 ```
 
-## Parse ETH to WEI
+## ETH to WEI
 
 ```jsx
 import { parse } from "@forta/usemetamask"
@@ -18,7 +20,7 @@ import { parse } from "@forta/usemetamask"
 parse.toWei(0.01) // 10000000000000000
 ```
 
-## Parse ETH to TX_WEI
+## ETH to TX_WEI
 
 This will parse a number to wei and return it's HEX value.
 It's useful for RPC methods like `eth_sendTransaction`
@@ -30,7 +32,7 @@ import { parse } from "@forta/usemetamask"
 parse.toTxWei(0.01) // "0x2386F26FC10000"
 ```
 
-## Parse WEI to ETH
+## WEI to ETH
 
 ```jsx
 import { parse } from "@forta/usemetamask"
@@ -40,7 +42,7 @@ const ETH_IN_WEI = 1_000_000_000_000_000_000
 parse.weiToEth(ETH_IN_WEI * 3) // 3
 ```
 
-## Parse HEX number to decimal
+## HEX number to decimal
 
 ```jsx
 import { parse } from "@forta/usemetamask"

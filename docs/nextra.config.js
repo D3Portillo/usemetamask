@@ -1,15 +1,17 @@
+import Logo from "./components/Logo"
+
 export default {
   projectLink: "https://github.com/D3Portillo/usemetamask",
   docsRepositoryBase:
     "https://github.com/D3Portillo/usemetamask/tree/master/docs/pages",
-  titleSuffix: " – @forta/usemetamask",
+  titleSuffix: " – @forta 🦍",
   nextLinks: true,
   prevLinks: true,
   search: true,
   customSearch: null,
   darkMode: true,
   footer: true,
-  footerText: `MIT ${new Date().getFullYear()} Denny Portillo.`,
+  footerText: `${new Date().getFullYear()} - MIT, Denny Portillo.`,
   footerEditLink: `Edit this page on GitHub`,
   head: (
     <>
@@ -18,7 +20,8 @@ export default {
   ),
   logo: (
     <>
-      <strong className="mr-2">useMetamask</strong>
+      <Logo size={28} />
+      <strong className="font-black">FORTA</strong>
     </>
   ),
 }

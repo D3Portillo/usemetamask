@@ -2,44 +2,16 @@
 title: Metamask's utility hook
 ---
 
-# @forta/usemetamask
+import Logo from "../components/Logo.js"
+import Modules from "../components/Modules.js"
 
-An utility React hook to handle Metamask's browser API
+<p align="center">
+  <Logo size={320} />
+  **FORTA** is a set of ~~atomic~~ wrapper & helper functions for the Web3 Ecosystem.
+</p>
 
-## Installation
+---
 
-```sh
-npm i @forta/usemetamask
-```
+<br />
 
-## Basic usage
-
-```jsx
-import { useMetamask } from "@forta/usemetamask"
-
-function App() {
-  const { account, connect, balance, metamask, accounts } = useMetamask()
-  return (
-    <div>
-      <p>Address: {account}</p>
-      <p>BALANCE: {balance}ETH</p>
-      <button onClick={connect}>CONNECT</button>
-    </div>
-  )
-}
-```
-
-## Send transaction
-
-```jsx
-import { parse, useMetamask } from "@forta/usemetamask"
-// ..
-
-const { send } = useMetamask()
-send({
-  to: "0x3c0e20fCA6d2E084127D056377a5f35294503447",
-  value: parse.toTxWei(0.5),
-  /* 0.5 in ETH. Request expects wei in HEX value.
-  .toTxWei parses a number to wei & then to HEX */
-})
-```
+<Modules />
