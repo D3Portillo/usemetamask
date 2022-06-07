@@ -36,7 +36,6 @@
     "roll": "npm run build && npm publish --access=public",
     "pack:untar": "tar -xf forta*.tgz",
     "build": "vite build && cp lib/*.d.ts -t dist/",
-    "build:docs": "npm run build:pack && cd docs && next build",
     "build:pack": "(rm -rf forta*.tgz LICENSE ||:) && npm run build && npm pack && npm run pack:untar && npm ln package",
     "start:pack": "npm run build:pack && vite --mode PACK playground",
     "start:docs": "cd docs && next",
