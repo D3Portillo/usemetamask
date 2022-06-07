@@ -1,7 +1,7 @@
 export default {
   projectLink: "https://github.com/D3Portillo/usemetamask",
   docsRepositoryBase:
-    "https://github.com/D3Portillo/usemetamask/tree/master/docs",
+    "https://github.com/D3Portillo/usemetamask/tree/master/docs/pages",
   titleSuffix: " – @forta/usemetamask",
   nextLinks: true,
   prevLinks: true,
