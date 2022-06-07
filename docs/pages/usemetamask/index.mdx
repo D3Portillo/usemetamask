@@ -3,6 +3,7 @@ title: Metamask's utility React hook
 ---
 
 import BadgesBanner from "../../components/BadgesBanner.js"
+import Connect from "../../components/examples/Connect.js"
 
 # useMetamask
 
@@ -21,17 +22,20 @@ npm i @forta/usemetamask
 ```jsx
 import { useMetamask } from "@forta/usemetamask"
 
-function App() {
-  const { account, connect, balance, metamask, accounts } = useMetamask()
+function Connect() {
+  const { account, connect, balance, error } = useMetamask()
   return (
-    <div>
-      <p>Address: {account}</p>
-      <p>BALANCE: {balance}ETH</p>
+    <>
+      <code>Address: {account || "null"}</code>
+      <code>Balance: {balance} ETH</code>
+      <code>Error: {error ? error.message : "null"}</code>
       <button onClick={connect}>CONNECT</button>
-    </div>
+    </>
   )
 }
 ```
+
+<Connect />
 
 ## Send transaction
 
