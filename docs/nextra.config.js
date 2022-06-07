@@ -10,6 +10,7 @@ export default {
   search: true,
   customSearch: null,
   darkMode: true,
+  floatTOC: true,
   footer: true,
   footerText: `${new Date().getFullYear()} - MIT, Denny Portillo.`,
   footerEditLink: `Edit this page on GitHub`,
