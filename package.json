@@ -12,7 +12,7 @@
     "react",
     "metamask",
     "wallet",
-    "cryto",
+    "crypto",
     "web3"
   ],
   "bugs": {
@@ -35,8 +35,9 @@
   "scripts": {
     "roll": "npm run build && npm publish --access=public",
     "pack:untar": "tar -xf forta*.tgz",
-    "build": "vite build && cp lib/*.d.ts -t dist/",
-    "build:pack": "(rm -rf forta*.tgz LICENSE ||:) && npm run build && npm pack && npm run pack:untar && npm ln package",
+    "build": "npm run clean && vite build && cp lib/*.d.ts -t dist/",
+    "clean": "rm -rf forta*.tgz LICENSE dist package ||:",
+    "build:pack": "npm run build && npm pack && npm run pack:untar && npm ln package",
     "start:pack": "npm run build:pack && vite --mode PACK playground",
     "start:docs": "cd docs && next",
     "start": "vite playground"
