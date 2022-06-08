@@ -8,25 +8,16 @@
 
 <p align="center">
   <a
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="NPM version"
     href="https://www.npmjs.com/package/@forta/usemetamask"
   >
     <img src="https://badgen.net/npm/v/@forta/usemetamask" />
   </a>
   <a
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Package size"
     href="https://bundlephobia.com/result?p=@forta/usemetamask"
   >
     <img src="https://badgen.net/bundlephobia/minzip/@forta/usemetamask" />
   </a>
   <a
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="License"
     href="https://github.com/D3Portillo/usemetamask/blob/master/LICENSE"
   >
     <img src="https://badgen.net/npm/license/@forta/usemetamask" />
@@ -56,7 +47,6 @@ function App() {
 }
 ```
 
-
 ## Send Ether
 
 ```js
@@ -72,4 +62,6 @@ send({
 })
 ```
 
-[🌟 READ THE DOCS 🌟](https://forta.vercel.app/usemetamask)
+---
+
+**[READ THE DOCS 🌟](https://forta.vercel.app/usemetamask)** | **[FOLLOW ME 🐦](https://twitter.com/d3portillo)**
