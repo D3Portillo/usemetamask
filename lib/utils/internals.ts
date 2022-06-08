@@ -1,5 +1,5 @@
 import { ERRORS, EVENTS, STR_TRUE } from "./constants"
-import { ErrorState, Metamask } from "../shared"
+import { ErrorState, Metamask } from "../shared.d"
 
 const ETHEREUM = "ethereum"
 const STORE_KEY = "USEMETAMASK_USERDATA"
