@@ -1,11 +1,12 @@
 /**
  * Library exported utilities
  */
-import { METHODS } from "./constants"
 import { Asset, SendBasicProps } from "../shared.d"
-import { withError, runIfMetamask, getMetamaskProvider } from "./helpers"
+import internals, { getMetamaskProvider, connectToMetamask } from "./internals"
 
-export { getMetamaskProvider }
+const { withError, runIfMetamask, switchNetwork } = internals
+
+export { getMetamaskProvider, connectToMetamask }
 
 export const addEtherToken = ({
   address,
@@ -19,7 +20,7 @@ export const addEtherToken = ({
   return runIfMetamask((metamask) => {
     return metamask
       .request({
-        method: METHODS.WALLET_WATCH_ASSET,
+        method: "wallet_watchAsset",
         params: {
           type: "ERC20",
           options: {
@@ -34,45 +35,8 @@ export const addEtherToken = ({
   })
 }
 
-export const switchOrAppendNetwork = ({
-  chainId,
-  chainName,
-  rpcUrl,
-  reloadOnSuccess,
-  blockExplorerUrl,
-  currencySymbol = "ETH",
-}): Promise<null> => {
-  return runIfMetamask(async (metamask) => {
-    return metamask
-      .request({
-        method: METHODS.WALLET_SWITCH_ETHER_CHAIN,
-        params: [{ chainId }],
-      })
-      .catch((error) => {
-        if (error.code === 4902) {
-          return addEtherNetwork({
-            chainName,
-            chainId,
-            rpcUrl,
-            reloadOnSuccess,
-            blockExplorerUrl,
-            currencySymbol,
-          })
-        }
-        return withError(error)
-      })
-  })
-}
-
 export const switchEtherNetwork = (chainId: string): Promise<null> => {
-  return runIfMetamask((metamask) => {
-    return metamask
-      .request({
-        method: METHODS.WALLET_SWITCH_ETHER_CHAIN,
-        params: [{ chainId }],
-      })
-      .catch(withError)
-  })
+  return switchNetwork(chainId).catch(withError)
 }
 
 export const addEtherNetwork = ({
@@ -86,7 +50,7 @@ export const addEtherNetwork = ({
   return runIfMetamask((metamask) => {
     metamask
       .request({
-        method: METHODS.WALLET_ADD_ETHER_CHAIN,
+        method: "wallet_addEthereumChain",
         params: [
           {
             chainName,
@@ -108,6 +72,31 @@ export const addEtherNetwork = ({
   })
 }
 
+export const switchOrAppendNetwork = ({
+  chainId,
+  chainName,
+  rpcUrl,
+  reloadOnSuccess,
+  blockExplorerUrl,
+  currencySymbol = "ETH",
+}): Promise<null> => {
+  return switchNetwork(chainId).catch((error) => {
+    if (error.code === 4902) {
+      return addEtherNetwork({
+        chainName,
+        chainId,
+        rpcUrl,
+        reloadOnSuccess,
+        blockExplorerUrl,
+        currencySymbol,
+      })
+        .then(() => switchNetwork(chainId))
+        .catch(withError)
+    }
+    return withError(error)
+  })
+}
+
 export const metamaskRequest = (props) => {
   return runIfMetamask((metamask) => {
     return metamask.request(props).catch(withError)
@@ -122,7 +111,7 @@ export const sendEther = ({
   return runIfMetamask((metamask) => {
     return metamask
       .request({
-        method: METHODS.ETH_SEND_TRANSACTION,
+        method: "eth_sendTransaction",
         params: [
           {
             from,

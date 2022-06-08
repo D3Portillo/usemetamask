@@ -1,19 +1,10 @@
-export const METHODS = {
-  WALLET_WATCH_ASSET: "wallet_watchAsset",
-  WALLET_SWITCH_ETHER_CHAIN: "wallet_switchEthereumChain",
-  WALLET_ADD_ETHER_CHAIN: "wallet_addEthereumChain",
-  ETH_REQUEST_ACCOUNTS: "eth_requestAccounts",
-  ETH_SEND_TRANSACTION: "eth_sendTransaction",
-  ETH_ACCOUNTS: "eth_accounts",
-} as const
-
 export const ERRORS = {
   METAMASK_NOT_INSTALLED: {
-    code: 333,
+    code: -600,
     message: "Metamask not installed",
   },
   USER_NOT_CONNECTED: {
-    code: 0,
+    code: -601,
     message: "User not connected",
   },
 } as const

@@ -9,4 +9,5 @@ export {
   metamaskRequest,
   sendEther,
   parse,
+  connectToMetamask,
 } from "./utils"

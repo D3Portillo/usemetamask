@@ -46,5 +46,6 @@ export function switchOrAppendNetwork(props: AddEtherNetwork): Promise<null>
  * @returns Transaction hash string
  */
 export function sendEther(props: SendMethodProps): Promise<string>
+export function connectToMetamask(): Promise<string>
 export const metamaskRequest: OnRequest["request"]
 export const parse: Parse

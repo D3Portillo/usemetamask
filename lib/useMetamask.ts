@@ -2,13 +2,9 @@ import { useEffect, useRef, useState } from "react"
 import { Metamask, SendBasicProps, UseMatamaskAPI } from "./shared.d"
 import { getMetamaskProvider, sendEther, parse } from "./utils"
 import { STR_FALSE, STR_TRUE, EVENTS } from "./utils/constants"
-import {
-  setStoreState,
-  connectToMetamask,
-  userIsForceDisconnected,
-  noOp,
-} from "./utils/helpers"
+import internals, { connectToMetamask } from "./utils/internals"
 
+const { noOp, setStoreState, userIsForceDisconnected } = internals
 const ACCOUNTS_CHANGED = "accountsChanged"
 const ON_DISCONNECT = "disconnect"
 const ONE_MINUTE_IN_MS = 60000
@@ -37,7 +33,7 @@ function useMetamask(onMetamaskHook): UseMatamaskAPI {
 
   useEffect(() => {
     const metamask = getMetamaskProvider()
-    let hookCleanerFn = undefined
+    let hookCleanerFn = noOp
     function handleEventError(e) {
       e.detail && handleError(e.detail)
     }

@@ -1,6 +1,6 @@
 {
   "name": "@forta/usemetamask",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "author": {
     "name": "Denny Portillo"
@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/D3Portillo/usemetamask/issues"
   },
-  "homepage": "https://github.com/D3Portillo/usemetamask",
+  "homepage": "https://forta.vercel.app/usemetamask",
   "repository": "D3Portillo/usemetamask",
   "files": [
     "dist"

@@ -104,10 +104,6 @@ interface OnEvent {
 }
 
 // * Exported types
-export interface WithErrorState {
-  error?: ErrorState
-}
-
 export interface Metamask extends OnEvent, OnRequest {
   isConnected(): boolean
   /**
@@ -117,6 +113,7 @@ export interface Metamask extends OnEvent, OnRequest {
    * if MetaMask is unlocked by the user.
    */
   isUserUnlocked(): Promise<boolean>
+  isMetaMask: boolean
   chainId: string
   removeListener: (e: string, f: any) => void
   selectedAddress: string | null
