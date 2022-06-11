@@ -1,6 +1,6 @@
 {
   "name": "@forta/usemetamask",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "author": {
     "name": "Denny Portillo"
@@ -39,19 +39,19 @@
     "clean": "rm -rf forta*.tgz LICENSE dist package ||:",
     "build:pack": "npm run build && npm pack && npm run pack:untar && npm ln package",
     "start:pack": "npm run build:pack && vite --mode PACK playground",
-    "start:docs": "cd docs && next",
+    "start:docs": "npm run build:pack && cd docs && next",
     "start": "npm run build:pack && vite playground"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@vitejs/plugin-react": "^1.3.0",
-    "next": "^12.1.6",
+    "typescript": "^4.6.3",
+    "vite": "^2.9.9",
+    "next": "^12.1.0",
     "nextra": "^2.0.0-alpha.50",
     "nextra-theme-docs": "^2.0.0-alpha.53",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "typescript": "^4.6.3",
-    "vite": "^2.9.9"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }
