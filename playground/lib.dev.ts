@@ -19,4 +19,7 @@ export const switchOrAppendNetwork = lib.switchOrAppendNetwork
 export const connectToMetamask = lib.connectToMetamask
 export const sendEther = lib.sendEther
 export const metamaskRequest = lib.metamaskRequest
+export const useTokenPrice = lib.useTokenPrice
+export const formatEther = lib.formatEther
+export const getFIATBalance = lib.getFIATBalance
 export const parse = lib.parse
