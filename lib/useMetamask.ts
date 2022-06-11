@@ -1,21 +1,28 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Metamask, SendBasicProps, UseMatamaskAPI } from "./shared.d"
-import { getMetamaskProvider, sendEther, parse } from "./utils"
+import {
+  getMetamaskProvider,
+  connectToMetamask,
+  sendEther,
+  parse,
+  formatEther,
+} from "./utils"
 import { STR_FALSE, STR_TRUE, EVENTS } from "./utils/constants"
-import internals, { connectToMetamask } from "./utils/internals"
+import internals from "./utils/internals"
 
 const { noOp, setStoreState, userIsForceDisconnected } = internals
 const ACCOUNTS_CHANGED = "accountsChanged"
 const ON_DISCONNECT = "disconnect"
 const ONE_MINUTE_IN_MS = 60000
 const EMPTY_BALANCE = "0.00"
+
 function useMetamask(onMetamaskHook): UseMatamaskAPI {
   const [error, setError] = useState(null)
   const [metamask, setMetamask] = useState<Metamask>({} as any)
   const [triggerRefetch, setTriggerRefetch] = useState(0)
   const [accounts, setAccounts] = useState([])
   const [account, setAccount] = useState(null)
-  const [balance, setBalance] = useState(EMPTY_BALANCE)
+  const [balance, setBalance] = useState({ raw: 0, formatted: EMPTY_BALANCE })
   const timer = useRef(null)
 
   const resetError = () => setError(null)
@@ -72,16 +79,19 @@ function useMetamask(onMetamaskHook): UseMatamaskAPI {
   }, [accounts, account])
 
   useEffect(() => {
+    clearTimeout(timer.current)
     if (metamask && account) {
-      clearTimeout(timer.current)
       metamask
         .request({
           method: "eth_getBalance",
           params: [account, "latest"],
         })
         .then((value) => {
-          console.info("useMetamask::eth_getBalance#refetch")
-          setBalance(parse.txWeiToEth(value).toFixed(2))
+          const rawBalance = parse.txWeiToEth(value)
+          setBalance({
+            formatted: formatEther(rawBalance),
+            raw: rawBalance,
+          })
           timer.current = setTimeout(
             () => setTriggerRefetch((n) => n + 1),
             ONE_MINUTE_IN_MS * 3
@@ -110,15 +120,26 @@ function useMetamask(onMetamaskHook): UseMatamaskAPI {
       .catch(handleError)
   }
 
-  const chainId = metamask.chainId ? metamask.chainId : "0x0"
-  const isConnected = typeof account === "string"
+  const memoizedState = useMemo(() => {
+    const chainId = metamask.chainId ? metamask.chainId : "0x0"
+    const isConnected = typeof account === "string"
+    return {
+      chainId,
+      chainIdDecimal: parseInt(chainId, 16),
+      isConnected,
+      formattedBalance: isConnected ? balance.formatted : EMPTY_BALANCE,
+      balance: isConnected ? balance.raw : 0,
+    }
+  }, [account, balance])
+
   return {
     send: proxiedSend,
-    isConnected,
-    chainIdDecimal: parseInt(chainId),
-    chainId,
+    isConnected: memoizedState.isConnected,
+    chainIdDecimal: memoizedState.chainIdDecimal,
+    chainId: memoizedState.chainId,
     metamask,
-    balance: isConnected ? balance : EMPTY_BALANCE,
+    formattedBalance: memoizedState.formattedBalance,
+    balance: balance.raw,
     connect: proxiedConnect,
     disconnect,
     account,
