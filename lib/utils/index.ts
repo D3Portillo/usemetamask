@@ -2,11 +2,12 @@
  * Library exported utilities
  */
 import { Asset, SendBasicProps } from "../shared.d"
-import internals, { getMetamaskProvider, connectToMetamask } from "./internals"
-
+import internals from "./internals"
 const { withError, runIfMetamask, switchNetwork } = internals
 
-export { getMetamaskProvider, connectToMetamask }
+export { default as parse } from "./parse"
+
+export const getMetamaskProvider = internals.getMetamaskProvider
 
 export const addEtherToken = ({
   address,
@@ -124,17 +125,19 @@ export const sendEther = ({
   })
 }
 
-export const parse = {
-  toHex: (n: number) => {
-    if (n < 0) {
-      // Handle negative overflow
-      n = 0xffffffff + n + 1
-    }
-    return `0x${n.toString(16).toUpperCase()}`
-  },
-  hexToInt: (str: string) => parseInt(str, 16),
-  toWei: (n: number) => n * 10 ** 18,
-  toTxWei: (n: number) => parse.toHex(parse.toWei(n)),
-  weiToEth: (n: number) => n * 10 ** -18,
-  txWeiToEth: (s: string) => parse.weiToEth(parse.hexToInt(s)),
+export const connectToMetamask = () => {
+  return runIfMetamask((metamask) => {
+    return metamask
+      .request({ method: "eth_requestAccounts" })
+      .then(([account]) => account)
+  }, false)
+}
+
+export const formatEther = (balance: number) => {
+  const result = balance < 0 ? balance.toPrecision(2) : balance.toFixed(3)
+  return `${parseFloat(result)}`
+}
+
+export const getFIATBalance = (balance, price) => {
+  return parseFloat((balance * price).toFixed(2))
 }
