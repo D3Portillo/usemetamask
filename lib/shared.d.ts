@@ -104,6 +104,12 @@ interface OnEvent {
 }
 
 // * Exported types
+export type FIATCurrencies = {
+  usd: number
+  jpy: number
+  eur: number
+}
+
 export interface Metamask extends OnEvent, OnRequest {
   isConnected(): boolean
   /**
@@ -126,7 +132,8 @@ export interface UseMatamaskAPI {
   resetError: () => void
   account: string
   accounts: string[]
-  balance: string
+  balance: number
+  formattedBalance: string
   chainId: string
   chainIdDecimal: number
   error?: ErrorState
