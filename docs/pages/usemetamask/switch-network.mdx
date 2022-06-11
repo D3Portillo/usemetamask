@@ -1,0 +1,43 @@
+---
+title: Switch Chain/Network
+---
+
+import SwitchToRinkeby from "../../components/examples/SwitchToRinkeby.js"
+import Link from "next/link"
+
+# switchEtherNetwork
+
+The `switchEtherNetwork` function expects a chainId in HEX base.
+You can parse a decimal id using the <Link href="/usemetamask/parse">parse nano-module</Link>.
+
+```jsx
+import { switchEtherNetwork } from "@forta/usemetamask"
+
+const RIKEBY_ID = "0x4"
+
+function SwitchToRinkeby() {
+  return (
+    <Button onClick={() => switchEtherNetwork(RIKEBY_ID)}>
+      Switch Network
+    </Button>
+  )
+}
+```
+
+<SwitchToRinkeby />
+
+Example using a decimal chainId using the <Link href="/usemetamask/parse">parse nano-module</Link>.
+
+```jsx
+import { switchEtherNetwork, parse } from "@forta/usemetamask"
+
+const RIKEBY_ID = oarse.toHex(4) // 0x4
+
+function SwitchToRinkeby() {
+  return (
+    <Button onClick={() => switchEtherNetwork(RIKEBY_ID)}>
+      Switch Network
+    </Button>
+  )
+}
+```

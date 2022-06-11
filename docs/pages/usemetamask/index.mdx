@@ -4,6 +4,8 @@ title: Metamask's utility React hook
 
 import BadgesBanner from "../../components/BadgesBanner.js"
 import Connect from "../../components/examples/Connect.js"
+import AddZRXToken from "../../components/examples/AddZRXToken.js"
+import EtherPrice from "../../components/examples/EtherPrice.js"
 
 # useMetamask
 
@@ -23,11 +25,12 @@ npm i @forta/usemetamask
 import { useMetamask } from "@forta/usemetamask"
 
 function Connect() {
-  const { account, connect, balance, error } = useMetamask()
+  const { account, connect, balance, formattedBalance, error } = useMetamask()
   return (
     <>
       <code>Address: {account || "null"}</code>
       <code>Balance: {balance} ETH</code>
+      <code>FormattedBalance: {formattedBalance} ETH</code>
       <code>Error: {error ? error.message : "null"}</code>
       <button onClick={connect}>CONNECT</button>
     </>
@@ -51,3 +54,53 @@ send({
   .toTxWei parses a number to wei & then to HEX */
 })
 ```
+
+## Add Token
+
+```jsx
+import { addEtherToken } from "@forta/usemetamask"
+// ..
+
+const ZRX = {
+  address: "0xe41d2489571d322189246dafa5ebde1f4699f498",
+  symbol: "ZRX",
+}
+function App() {
+  return <button onClick={() => addEtherToken(ZRX)}>ADD ZRX TOKEN</button>
+}
+```
+
+<AddZRXToken />
+
+## Get Token Price
+
+```jsx
+import { useTokenPrice } from "@forta/usemetamask"
+
+function TokenPrice() {
+  const [price, refetch] = useTokenPrice("shiba-inu")
+  // https://www.coingecko.com/en/coins/shiba-inu
+
+  return (
+    <table>
+      <tbody>
+        <tr>
+          <td>{price.usd}</td>
+        </tr>
+        <tr>
+          <td>{price.eur}</td>
+        </tr>
+        <tr>
+          <td>{price.jpy}</td>
+        </tr>
+      </tbody>
+    </table>
+  )
+}
+```
+
+<EtherPrice />
+
+Note that this token-id is being taken from the `API-id` as shown here.
+
+![Reference on where tok take API-id property at coingecko.com](../../public/app-id.png)
