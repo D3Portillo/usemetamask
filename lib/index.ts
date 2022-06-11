@@ -1,5 +1,5 @@
 export { default as useMetamask } from "./useMetamask"
-
+export { default as useTokenPrice } from "./useTokenPrice"
 export {
   addEtherNetwork,
   addEtherToken,
@@ -10,4 +10,6 @@ export {
   sendEther,
   parse,
   connectToMetamask,
+  getFIATBalance,
+  formatEther,
 } from "./utils"
