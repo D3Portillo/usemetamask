@@ -11,7 +11,7 @@ function Connect() {
       <code>Balance: {balance} ETH</code>
       <code>formattedBalance: {formattedBalance} ETH</code>
       <code>Error: {error ? error.message : "null"}</code>
-      <Button onClick={connect}>CONNECT</Button>
+      <Button onClick={connect}>CONNECT 🔗</Button>
     </DataCard>
   )
 }

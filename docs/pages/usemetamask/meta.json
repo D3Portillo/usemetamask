@@ -1,4 +1,7 @@
 {
   "index": "Get Started",
-  "parse": "Parse nano-module"
+  "utilities": "Wallet Utilities",
+  "switch-network": "Chain/Network Switch",
+  "parse": "Parse Nano-module",
+  "error-state": "Error State"
 }

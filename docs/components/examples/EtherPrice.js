@@ -37,7 +37,7 @@ function EtherPrice() {
         price.
       </p>
       <br />
-      <Button onClick={refetch}>FETCH LATEST PRICE</Button>
+      <Button onClick={refetch}>Get latest SHIB Price</Button>
     </Fragment>
   )
 }

@@ -1,0 +1,57 @@
+---
+title: "Error handling"
+---
+
+import Callout from "nextra-theme-docs/callout"
+import Connect from "../../components/examples/Connect.js"
+
+Any error that occurs using any provided hook, function or utility can be consumed at the `.error` prop from `useMetamak` hook.
+
+`error` has two properties and is `null` when no error presented.
+
+| Property        | Description                               |
+| --------------- | ----------------------------------------- |
+| `error.message` | Message trapped when the error ocurred    |
+| `error.code`    | Metamask, forta or RPC related code error |
+
+## Example
+
+Try to connect and **Cancel/Deny** the request.
+This will update the error state for the hook
+
+<Callout type="warning" emoji="⚠️">
+  Note that `.error` is `null` when there's no error state.
+</Callout>
+
+```jsx
+import { useMetamask } from "@forta/usemetamask"
+
+function Connect() {
+  const { error } = useMetamask()
+  return (
+    <>
+      <code>Error: {error ? error.message : "null"}</code>
+      <button onClick={connect}>CONNECT</button>
+    </>
+  )
+}
+```
+
+<Connect />
+
+## Forta error definitions
+
+```js
+export const ERRORS = {
+  METAMASK_NOT_INSTALLED: {
+    code: -600,
+    message: "Metamask not installed",
+  },
+  USER_NOT_CONNECTED: {
+    code: -601,
+    message: "User not connected",
+  },
+}
+```
+
+[See all ERRORS definition](https://github.com/D3Portillo/usemetamask/blob/master/lib/utils/constants.ts#L1)

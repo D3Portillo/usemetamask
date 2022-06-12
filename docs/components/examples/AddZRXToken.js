@@ -8,7 +8,7 @@ const ZRX = {
 }
 
 function AddZRXToken() {
-  return <Button onClick={() => addEtherToken(ZRX)}>ADD ZRX TOKEN</Button>
+  return <Button onClick={() => addEtherToken(ZRX)}>Add ZRX Token</Button>
 }
 
 export default AddZRXToken

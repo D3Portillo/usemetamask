@@ -1,0 +1,182 @@
+---
+title: API Definintions
+---
+
+import TypeTable from "../../components/TypeTable.js"
+
+## useMetamask{"<>"}
+
+<TypeTable>
+  <tr>
+    <td>useMetamask{"<>"}(`CallBack | undefined`)</td>
+    <td>`function`</td>
+    <td>[UseMatamaskAPI](/usemetamask/api#type-usematamaskapi)</td>
+  </tr>
+  <tr>
+    <td>
+      CallBack{"<>"}(`Metamask`)
+      <small>
+        When calling `useMetamask` hook you can provide a function that expects
+        the Metamask object as param. <br />
+        You can for example add a listener to chainChanged event and then `location.reload`.
+      </small>
+    </td>
+    <td>`function`</td>
+    <td>`HookCleaner`</td>
+  </tr>
+  <tr>
+    <td>`Metamask`</td>
+    <td>[Metamask](/usemetamask/api#type-metamask)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>
+      `HookCleaner`
+      <small>
+        [React like Cleaner
+        function](https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup)
+        in where you can as an example destroy listeners attached to metamask.
+      </small>
+    </td>
+    <td>`function`</td>
+    <td>`void | function`</td>
+  </tr>
+</TypeTable>
+
+## useTokenPrice{"<>"}
+
+<TypeTable>
+  <tr>
+    <td>useTokenPrice{"<>"}(`string`)</td>
+    <td>`function`</td>
+    <td>`[number, ReFetchFn]`</td>
+  </tr>
+  <tr>
+    <td>
+      ReFetchFn{"<>"}
+      <small>
+        Hook resolves with an Array of 2 elements. <br/>
+        Index 1 of the Array is a function which trigger
+        a fetch to the coinGecko API
+      </small>
+    </td>
+    <td>`function`</td>
+    <td>`void`</td>
+  </tr>
+</TypeTable>
+
+## Parse
+
+`Parse` is a nano-module that includes a set of small functions to format/manipulate Ether.
+
+```ts
+interface Parse {
+  toHex: (n: number) => string
+  hexToInt: (s: string) => number
+  toWei: (s: number) => number
+  toTxWei: (n: number) => string
+  weiToEth: (n: number) => number
+  txWeiToEth: (s: string) => number
+}
+```
+
+<TypeTable>
+  <tr>
+    <td>
+      toHex{"<>"}(`number`)
+      <small>
+        Parses a number to a it's HEX base value.
+      </small>
+    </td>
+    <td>`function`</td>
+    <td>`string`</td>
+  </tr>
+
+  <tr>
+    <td>
+      hexToInt{"<>"}(`number`)
+      <small>
+        Parses a HEX base number to it's decimal value.
+      </small>
+    </td>
+    <td>`function`</td>
+    <td>`number`</td>
+  </tr>
+
+  <tr>
+    <td>
+      toWei{"<>"}(`number`)
+      <small>
+        Returns the wei value of a decimal number.
+      </small>
+    </td>
+    <td>`function`</td>
+    <td>`number`</td>
+  </tr>
+
+  <tr>
+    <td>
+      toTxWei{"<>"}(`number`)
+      <small>
+        Returns the HEX base value of a decimal number.
+      </small>
+    </td>
+    <td>`function`</td>
+    <td>`string`</td>
+  </tr>
+
+  <tr>
+    <td>
+      weiToEth{"<>"}(`number`)
+      <small>
+        Returns the value in `ETH` for the provided `wei` value.
+      </small>
+    </td>
+    <td>`function`</td>
+    <td>`number`</td>
+  </tr>
+
+  <tr>
+    <td>
+      txWeiToEth{"<>"}(`string`)
+      <small>
+        Returns the decimal value for a HEX base `wei`
+      </small>
+    </td>
+    <td>`function`</td>
+    <td>`number`</td>
+  </tr>
+</TypeTable>
+
+## @Type Metamask
+
+```ts
+export interface Metamask extends OnEvent, OnRequest {
+  isConnected(): boolean
+  isUserUnlocked(): Promise<boolean>
+  isMetaMask: boolean
+  chainId: string
+  removeListener: (e: string, f: any) => void
+  selectedAddress: string | null
+}
+```
+
+## @Type UseMatamaskAPI
+
+```ts
+export interface UseMatamaskAPI {
+  connect: () => void
+  disconnect: (props?: { reload?: boolean }) => void
+  send: (props: Omit<SendMethodProps, "from">) => Promise<string>
+  resetError: () => void
+  account: string
+  accounts: string[]
+  balance: number
+  formattedBalance: string
+  chainId: string
+  chainIdDecimal: number
+  error?: ErrorState
+  metamask: Metamask
+  isConnected: boolean
+}
+```
