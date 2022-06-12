@@ -1,15 +1,19 @@
+import ResponsiveTable from "./ResponsiveTable"
+
 function TypeTable({ children = null }) {
   return (
-    <table style={{ marginTop: "2rem" }}>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Returns</th>
-        </tr>
-      </thead>
-      <tbody>{children}</tbody>
-    </table>
+    <ResponsiveTable>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Returns</th>
+          </tr>
+        </thead>
+        <tbody>{children}</tbody>
+      </table>
+    </ResponsiveTable>
   )
 }
 

@@ -1,7 +1,27 @@
+body {
+  overflow-x: hidden;
+}
+
 small {
   opacity: 0.7;
 }
 
-table code {
+.responsive-table {
+  overflow-x: auto;
+  margin-top: 2rem;
+}
+
+table code,
+.responsive-table td {
   white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .responsive-table td {
+    white-space: normal;
+  }
+}
+
+table:not(.mx-auto) {
+  width: 100%;
 }

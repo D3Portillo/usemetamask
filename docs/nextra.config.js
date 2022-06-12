@@ -1,4 +1,5 @@
 import Logo from "./components/Logo"
+import head from "./head.nextra"
 
 export default {
   projectLink: "https://github.com/D3Portillo/usemetamask",
@@ -14,11 +15,7 @@ export default {
   footer: true,
   footerText: `${new Date().getFullYear()} - MIT, Denny Portillo.`,
   footerEditLink: `Edit this page on GitHub`,
-  head: (
-    <>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    </>
-  ),
+  head,
   logo: (
     <>
       <Logo size={28} />
