@@ -26,7 +26,7 @@ interface AddEtherToken {
 interface Parse {
   toHex: (n: number) => string
   hexToInt: (s: string) => number
-  toWei: (s: string) => number
+  toWei: (s: number) => number
   toTxWei: (n: number) => string
   weiToEth: (n: number) => number
   txWeiToEth: (s: string) => number
