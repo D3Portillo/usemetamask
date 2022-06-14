@@ -1,7 +1,7 @@
 {
   "include": ["lib", "playground/lib.dev.ts"],
   "compilerOptions": {
-    "typeRoots": ["./global.d.ts"],
+    "types": ["jest"],
     "lib": ["dom", "esnext"],
     "target": "esnext",
     "module": "esnext",
@@ -12,6 +12,7 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "outDir": "dist-tsc",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "jsx": "react"
   }
 }
