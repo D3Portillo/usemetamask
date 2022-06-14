@@ -16,7 +16,7 @@ const ON_DISCONNECT = "disconnect"
 const ONE_MINUTE_IN_MS = 60000
 const EMPTY_BALANCE = "0.00"
 
-function useMetamask(onMetamaskHook): UseMatamaskAPI {
+function useMetamask(onMetamaskHook?): UseMatamaskAPI {
   const [error, setError] = useState(null)
   const [metamask, setMetamask] = useState<Metamask>({} as any)
   const [triggerRefetch, setTriggerRefetch] = useState(0)
