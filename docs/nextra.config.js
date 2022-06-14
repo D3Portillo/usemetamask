@@ -5,7 +5,7 @@ export default {
   projectLink: "https://github.com/D3Portillo/usemetamask",
   docsRepositoryBase:
     "https://github.com/D3Portillo/usemetamask/tree/master/docs/pages",
-  titleSuffix: " – @forta 🦍",
+  titleSuffix: " – @forta 💪",
   nextLinks: true,
   prevLinks: true,
   search: true,
