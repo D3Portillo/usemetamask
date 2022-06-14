@@ -11,11 +11,13 @@ export function exposeMetamask(metamaskEth: {
   request?: Metamask["request"]
   on?: Metamask["on"]
 }) {
-  window["ethereum"] = {
+  const metamask = {
     selectedAddress: "ADDRESS",
     isMetaMask: true,
     removeListener: jest.fn(),
     on: jest.fn(),
     ...metamaskEth,
   }
+  window["ethereum"] = metamask
+  return metamask
 }
