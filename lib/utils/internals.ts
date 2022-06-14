@@ -3,7 +3,7 @@ import { ErrorState, Metamask } from "../shared.d"
 
 const ETHEREUM = "ethereum"
 const STORE_KEY = "USEMETAMASK_USERDATA"
-
+const DASH_METAMASK = "_metamask"
 class Internals {
   noOp = () => {}
 
@@ -26,7 +26,9 @@ class Internals {
   getMetamaskProvider = () => {
     const metamask = this.getGlobalWindow()[ETHEREUM]
     if (metamask && metamask["isMetaMask"]) {
-      metamask.isUserUnlocked = metamask["_metamask"].isUnlocked
+      const _metamask = metamask[DASH_METAMASK]
+      const isUnlocked = _metamask && _metamask.isUnlocked
+      metamask.isUserUnlocked = isUnlocked || this.noOp
       return metamask
     }
     return null
