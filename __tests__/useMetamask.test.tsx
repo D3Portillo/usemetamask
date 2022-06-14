@@ -1,5 +1,5 @@
 import * as React from "react"
-import { act, render } from "@testing-library/react"
+import { act, render, RenderResult } from "@testing-library/react"
 
 import { UseMatamaskAPI } from "../lib/shared"
 import { useMetamask } from "../lib/index"
@@ -9,14 +9,14 @@ import { exposeMetamask, waitForUseEffect } from "../__utils__"
 
 function ExposeHook({
   onRender = (_: UseMatamaskAPI) => {},
-  onMetamask = undefined,
+  onMetamask = undefined as any,
 }) {
   onRender(useMetamask(onMetamask))
   return null
 }
 
 describe("useMetamask", () => {
-  let node
+  let node: RenderResult
   afterEach(() => {
     if (node && node.unmount) {
       node.unmount()
@@ -72,5 +72,21 @@ describe("useMetamask", () => {
       api.disconnect()
     })
     expect(api.isConnected).toBeFalsy()
+  })
+
+  it("should expose metamask at hook mount & execute cleanerFn", async () => {
+    const exposedMetamask = exposeMetamask({
+      request: jest.fn().mockResolvedValue(ACCOUNTS),
+    })
+    const mockOnRender = jest.fn()
+    const mockCleanerFn = jest.fn()
+    const mockOnMetamask = jest.fn(() => mockCleanerFn)
+    node = render(
+      <ExposeHook onRender={mockOnRender} onMetamask={mockOnMetamask} />
+    )
+    await waitForUseEffect(node)
+    expect(mockOnMetamask).toBeCalledWith(exposedMetamask)
+    node.unmount() // Remove component to trigger hookCleaner
+    expect(mockCleanerFn).toHaveBeenCalledTimes(1)
   })
 })
