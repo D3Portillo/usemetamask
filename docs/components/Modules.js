@@ -9,7 +9,6 @@ function Modules() {
         <thead>
           <tr>
             <th>MODULES</th>
-            <th>STATUS</th>
             <th>TYPE</th>
             <th>LINKS</th>
           </tr>
@@ -19,7 +18,6 @@ function Modules() {
             <td>
               <Link href="/usemetamask">@forta/useMetamask</Link>
             </td>
-            <td>PUBLISHED</td>
             <td>React Hook</td>
             <td>
               <a
