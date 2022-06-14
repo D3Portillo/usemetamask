@@ -15,6 +15,7 @@ const ACCOUNTS_CHANGED = "accountsChanged"
 const ON_DISCONNECT = "disconnect"
 const ONE_MINUTE_IN_MS = 60000
 const EMPTY_BALANCE = "0.00"
+const isFunction = (f) => typeof f === "function"
 
 function useMetamask(onMetamaskHook?): UseMatamaskAPI {
   const [error, setError] = useState(null)
@@ -54,7 +55,8 @@ function useMetamask(onMetamaskHook?): UseMatamaskAPI {
       metamask.on(ACCOUNTS_CHANGED, setAccounts)
       metamask.on(ON_DISCONNECT, handleDisconnect)
       metamask.request({ method: "eth_accounts" }).then(setAccounts)
-      hookCleanerFn = onMetamaskHook ? onMetamaskHook(metamask) : noOp
+      const hookCleaner = isFunction(onMetamaskHook) && onMetamaskHook(metamask)
+      hookCleanerFn = isFunction(hookCleaner) ? hookCleaner : noOp
     }
     window.addEventListener(EVENTS.ON_METAMASK_ERROR, handleEventError)
     return () => {
