@@ -1,5 +1,7 @@
 import { act } from "@testing-library/react"
-import { Metamask } from "../lib/shared"
+import { Metamask } from "../../lib/shared"
+
+import { ACCOUNTS } from "./constans"
 
 export const waitForUseEffect = async (node) => {
   return act(async () => {
@@ -10,9 +12,11 @@ export const waitForUseEffect = async (node) => {
 export function exposeMetamask(metamaskEth: {
   request?: Metamask["request"]
   on?: Metamask["on"]
+  selectedAddress?: string
+  isMetaMask?: boolean
 }) {
   const metamask = {
-    selectedAddress: "ADDRESS",
+    selectedAddress: null,
     isMetaMask: true,
     removeListener: jest.fn(),
     on: jest.fn(),

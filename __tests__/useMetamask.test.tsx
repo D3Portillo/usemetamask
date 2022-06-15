@@ -1,11 +1,12 @@
 import * as React from "react"
 import { act, render, RenderResult } from "@testing-library/react"
 
+import { ERRORS } from "../lib/utils/constants"
 import { UseMatamaskAPI } from "../lib/shared"
 import { useMetamask } from "../lib/index"
 
-import { ACCOUNTS } from "../__utils__/constans"
-import { exposeMetamask, waitForUseEffect } from "../__utils__"
+import { ACCOUNTS } from "./__utils__/constans"
+import { exposeMetamask, waitForUseEffect } from "./__utils__"
 
 function ExposeHook({
   onRender = (_: UseMatamaskAPI) => {},
@@ -24,18 +25,20 @@ describe("useMetamask", () => {
     jest.clearAllMocks()
   })
 
-  it("should match empty state & no metamask", () => {
+  it("should match empty state & no metamask installed", async () => {
     const expectedState = {
       chainIdDecimal: 0,
       chainId: "0x0",
       metamask: {},
-      error: null,
       formattedBalance: "0.00",
       balance: 0,
+      error: ERRORS.METAMASK_NOT_INSTALLED,
     }
     const onRender = jest.fn()
     node = render(<ExposeHook onRender={onRender} />)
+    await waitForUseEffect(node)
     expect(node.container).toMatchSnapshot()
+    await waitForUseEffect(node)
     expect(onRender).toBeCalledWith(expect.objectContaining(expectedState))
   })
 
