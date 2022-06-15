@@ -17,6 +17,7 @@ const SELECTED_ADDRESS = "selectedAddress"
 const ONE_MINUTE_IN_MS = 60000
 const EMPTY_BALANCE = "0.00"
 const isFunction = (f) => typeof f === "function"
+const waitForStack = (Fn) => setTimeout(Fn)
 
 function useMetamask(onMetamaskHook?): UseMatamaskAPI {
   const [error, setError] = useState(null)
@@ -30,14 +31,14 @@ function useMetamask(onMetamaskHook?): UseMatamaskAPI {
   const resetError = () => setError(null)
   const handleError = (err) => {
     console.error(`useMetamask::Error`, err)
-    setTimeout(() => setError(err))
+    waitForStack(() => setError(err))
   }
 
   const disconnect = (__props) => {
     const props = __props || {}
     setStoreState(STR_TRUE)
     setAccounts([])
-    props.reload && window.location.reload()
+    waitForStack(() => props.reload && window.location.reload())
   }
 
   useEffect(() => {
@@ -143,7 +144,7 @@ function useMetamask(onMetamaskHook?): UseMatamaskAPI {
       formattedBalance: isConnected ? balance.formatted : EMPTY_BALANCE,
       balance: isConnected ? balance.raw : 0,
     }
-  }, [account, balance])
+  }, [account, balance.raw])
 
   return {
     send: proxiedSend,
@@ -152,7 +153,7 @@ function useMetamask(onMetamaskHook?): UseMatamaskAPI {
     chainId: memoizedState.chainId,
     metamask,
     formattedBalance: memoizedState.formattedBalance,
-    balance: balance.raw,
+    balance: memoizedState.balance,
     connect: proxiedConnect,
     disconnect,
     account,
