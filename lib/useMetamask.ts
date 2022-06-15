@@ -7,12 +7,13 @@ import {
   parse,
   formatEther,
 } from "./utils"
-import { STR_FALSE, STR_TRUE, EVENTS } from "./utils/constants"
+import { STR_FALSE, STR_TRUE, EVENTS, ERRORS } from "./utils/constants"
 import internals from "./utils/internals"
 
 const { noOp, setStoreState, userIsForceDisconnected } = internals
 const ACCOUNTS_CHANGED = "accountsChanged"
 const ON_DISCONNECT = "disconnect"
+const SELECTED_ADDRESS = "selectedAddress"
 const ONE_MINUTE_IN_MS = 60000
 const EMPTY_BALANCE = "0.00"
 const isFunction = (f) => typeof f === "function"
@@ -29,7 +30,7 @@ function useMetamask(onMetamaskHook?): UseMatamaskAPI {
   const resetError = () => setError(null)
   const handleError = (err) => {
     console.error(`useMetamask::Error`, err)
-    setError(err)
+    setTimeout(() => setError(err))
   }
 
   const disconnect = (__props) => {
@@ -54,9 +55,19 @@ function useMetamask(onMetamaskHook?): UseMatamaskAPI {
       setMetamask(metamask)
       metamask.on(ACCOUNTS_CHANGED, setAccounts)
       metamask.on(ON_DISCONNECT, handleDisconnect)
-      metamask.request({ method: "eth_accounts" }).then(setAccounts)
+      const etherAccounts = new Promise((resolve) => {
+        const selectedAddr = metamask[SELECTED_ADDRESS]
+        resolve(
+          selectedAddr
+            ? [selectedAddr]
+            : metamask.request({ method: "eth_accounts" })
+        )
+      })
+      etherAccounts.then(setAccounts)
       const hookCleaner = isFunction(onMetamaskHook) && onMetamaskHook(metamask)
       hookCleanerFn = isFunction(hookCleaner) ? hookCleaner : noOp
+    } else {
+      handleError(ERRORS.METAMASK_NOT_INSTALLED)
     }
     window.addEventListener(EVENTS.ON_METAMASK_ERROR, handleEventError)
     return () => {
@@ -77,7 +88,7 @@ function useMetamask(onMetamaskHook?): UseMatamaskAPI {
 
   useEffect(() => {
     // Error clean up
-    setError(null)
+    resetError()
   }, [accounts, account])
 
   useEffect(() => {
