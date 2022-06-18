@@ -25,3 +25,41 @@ table code,
 table:not(.mx-auto) {
   width: 100%;
 }
+
+.data-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.data-card code {
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.btn-doc {
+  padding: 0.7rem 1.3rem;
+  color: white;
+  font-weight: bold;
+  position: relative;
+}
+
+.btn-doc::before {
+  content: "";
+  background: linear-gradient(130deg, #fd1d1d 0%, #fcb045 100%);
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 2rem;
+  z-index: -1;
+  transition: background 150ms ease-in-out, transform 100ms ease-out;
+}
+
+.btn-doc:hover::before {
+  background: linear-gradient(142deg, #fd1d1d 0%, #fcb045 100%);
+  transform: scale(1.03);
+}

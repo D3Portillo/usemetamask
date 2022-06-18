@@ -1,17 +1,5 @@
 function DataCard({ children = null }) {
-  return (
-    <section
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "start",
-        alignItems: "start",
-        gap: ".5rem",
-      }}
-    >
-      {children}
-    </section>
-  )
+  return <section className="data-card">{children}</section>
 }
 
 export default DataCard

@@ -39,6 +39,28 @@ function Connect() {
 
 <Connect />
 
+## Reset/Clear Error state
+
+The hook will clear any error state when `account` or `accounts` props change.
+
+In some cases you want to clear this state like when re-starting a flow or so.
+To clear `.error` just call the `resetError` method from `useMetamask` hook.
+
+```jsx
+import { useMetamask } from "@forta/usemetamask"
+
+function ConnectReset() {
+  const { account, error, resetError } = useMetamask()
+  return (
+    <>
+      <code>Address: {account || "null"}</code>
+      <code>Error: {error ? error.message : "null"}</code>
+      <button onClick={resetError}>Reset error</button>
+    </>
+  )
+}
+```
+
 ## Forta error definitions
 
 ```js
@@ -54,4 +76,4 @@ export const ERRORS = {
 }
 ```
 
-[See all ERRORS definition](https://github.com/D3Portillo/usemetamask/blob/master/lib/utils/constants.ts#L1)
+[See all ERROR definitions](https://github.com/D3Portillo/usemetamask/blob/master/lib/utils/constants.ts#L1)

@@ -73,9 +73,9 @@ import TypeTable from "../../components/TypeTable.js"
 interface Parse {
   toHex: (n: number) => string
   hexToInt: (s: string) => number
-  toWei: (s: number) => number
-  toTxWei: (n: number) => string
-  weiToEth: (n: number) => number
+  toWei: (s: number | string) => string
+  toTxWei: (n: number | string) => string
+  weiToEth: (n: number | string) => number
   txWeiToEth: (s: string) => number
 }
 ```
@@ -105,18 +105,18 @@ interface Parse {
 
   <tr>
     <td>
-      toWei{"<>"}(`number`)
+      toWei{"<>"}(`number | string`)
       <small>
-        Returns the wei value of a decimal number.
+        Returns the wei value of a decimal string number.
       </small>
     </td>
     <td>`function`</td>
-    <td>`number`</td>
+    <td>`string`</td>
   </tr>
 
   <tr>
     <td>
-      toTxWei{"<>"}(`number`)
+      toTxWei{"<>"}(`number` | string)
       <small>
         Returns the HEX base value of a decimal number.
       </small>
@@ -127,7 +127,7 @@ interface Parse {
 
   <tr>
     <td>
-      weiToEth{"<>"}(`number`)
+      weiToEth{"<>"}(`number | string`)
       <small>
         Returns the value in `ETH` for the provided `wei` value.
       </small>
