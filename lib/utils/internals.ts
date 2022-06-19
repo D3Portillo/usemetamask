@@ -48,7 +48,7 @@ class Internals {
   }
 
   runIfMetamask = (
-    cb: (metamask: Metamask) => any,
+    cb: (metamask: Metamask) => Promise<any>,
     validateUserConnect?: boolean
   ): Promise<null> => {
     const metamask = this.getMetamaskProvider()
