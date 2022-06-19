@@ -18,10 +18,11 @@ const useTokenPrice = (
   }, [])
   useEffect(() => {
     clearTimeout(timer.current)
+    let mounted = true
     fetch(`${API_URL}?ids=${coinGeckoID}&vs_currencies=usd,eur,jpy`)
       .then((r) => r.json())
       .then((json) => {
-        if (coinGeckoID in json) {
+        if (coinGeckoID in json && mounted) {
           setPrice((state) => ({ ...state, ...json[coinGeckoID] }))
         }
       })
@@ -29,9 +30,12 @@ const useTokenPrice = (
       .finally(() => {
         // Constrain interval not to be less than 10s
         const secs = intervalInSecs < 10 ? 10 : intervalInSecs
-        setTimeout(triggerRefetch, secs * ONE_SEC_IN_MS)
+        timer.current = setTimeout(triggerRefetch, secs * ONE_SEC_IN_MS)
       })
-    return () => clearTimeout(timer.current)
+    return () => {
+      clearTimeout(timer.current)
+      mounted = false
+    }
   }, [count])
 
   return [price, triggerRefetch]
