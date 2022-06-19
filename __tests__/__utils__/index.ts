@@ -1,11 +1,9 @@
-import { act } from "@testing-library/react"
+import { act, RenderResult } from "@testing-library/react"
 import { Metamask } from "../../lib/shared"
 
-import { ACCOUNTS } from "./constans"
-
-export const waitForUseEffect = async (node) => {
+export const waitForUseEffect = async (node: RenderResult) => {
   return act(async () => {
-    await new Promise((resolve) => resolve(node))
+    await Promise.resolve(node)
   })
 }
 
