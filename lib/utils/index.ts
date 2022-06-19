@@ -49,7 +49,7 @@ export const addEtherNetwork = ({
   currencySymbol = "ETH",
 }): Promise<null> => {
   return runIfMetamask((metamask) => {
-    metamask
+    return metamask
       .request({
         method: "wallet_addEthereumChain",
         params: [
@@ -66,8 +66,9 @@ export const addEtherNetwork = ({
           },
         ],
       })
-      .then(() => {
-        reloadOnSuccess && window.location.reload()
+      .then((state) => {
+        reloadOnSuccess && location.reload()
+        return state
       })
       .catch(withError)
   })
