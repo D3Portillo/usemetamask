@@ -26,6 +26,7 @@ describe("useMetamask", () => {
   })
 
   it("should match empty state & no metamask installed", async () => {
+    jest.useFakeTimers()
     const expectedState = {
       chainIdDecimal: 0,
       chainId: "0x0",
@@ -35,11 +36,17 @@ describe("useMetamask", () => {
       error: ERRORS.METAMASK_NOT_INSTALLED,
     }
     const onRender = jest.fn()
+    const consoleError = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {})
     node = render(<ExposeHook onRender={onRender} />)
-    await waitForUseEffect(node)
     expect(node.container).toMatchSnapshot()
-    await waitForUseEffect(node)
+    expect(consoleError).toHaveBeenCalled()
+    act(() => {
+      jest.runAllTimers()
+    })
     expect(onRender).toBeCalledWith(expect.objectContaining(expectedState))
+    consoleError.mockRestore()
   })
 
   it("should render account='0x111'", async () => {
