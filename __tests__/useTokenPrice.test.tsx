@@ -35,8 +35,16 @@ describe("useTokenPrice", () => {
     expect(onRender).toBeCalledWith(expect.objectContaining([INIT_STATE]))
   })
 
-  it("should re-fetch once after 1min", async () => {
-    const onRender = jest.fn()
+  it("should re-fetch once after 1min & on reFetchFn call", async () => {
+    let mockRefetchData = jest.fn()
+    const onRender = jest.fn(([_, fn]) => {
+      mockRefetchData = fn
+    })
+    const ON_FN_CALL_STATE = {
+      ...INIT_STATE,
+      usd: 33,
+      jpy: 33,
+    }
     const NEW_STATE = {
       ...INIT_STATE,
       usd: 42,
@@ -46,9 +54,14 @@ describe("useTokenPrice", () => {
       .mockResolvedValueOnce({
         json: () => ({}),
       })
-      .mockResolvedValue({
+      .mockResolvedValueOnce({
         json: () => ({
           bitcoin: NEW_STATE,
+        }),
+      })
+      .mockResolvedValue({
+        json: () => ({
+          bitcoin: ON_FN_CALL_STATE,
         }),
       })
     node = render(<ExposeHook onRender={onRender} />)
@@ -61,6 +74,11 @@ describe("useTokenPrice", () => {
     })
     await waitForUseEffect(node)
     expect(onRender).toBeCalledWith(expect.objectContaining([NEW_STATE]))
+    act(() => {
+      mockRefetchData()
+    })
+    await waitForUseEffect(node)
+    expect(onRender).toBeCalledWith(expect.objectContaining([ON_FN_CALL_STATE]))
   })
 
   it("shouldn't update state on re-fetch for unmount", async () => {
