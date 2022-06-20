@@ -44,6 +44,23 @@ describe("utils", () => {
     await expect(addEtherToken(INPUT)).rejects.toEqual(ERROR)
     await expect(switchEtherNetwork(INPUT)).rejects.toEqual(ERROR)
     await expect(switchOrAppendNetwork(INPUT)).rejects.toEqual(ERROR)
+
+    /**
+     * In this context withInternalError means that window.ethereum exists
+     * for the `useMetamask` to function but metamask.request fails
+     */
+    const INTERNAL_ERROR = {
+      code: 0,
+      message: "INTERNAL_ERROR",
+    }
+    exposeMetamask({
+      request: jest.fn().mockRejectedValue(INTERNAL_ERROR),
+    })
+    await expect(addEtherNetwork(INPUT)).rejects.toEqual(INTERNAL_ERROR)
+    await expect(sendEther(INPUT)).rejects.toEqual(INTERNAL_ERROR)
+    await expect(addEtherToken(INPUT)).rejects.toEqual(INTERNAL_ERROR)
+    await expect(switchEtherNetwork(INPUT)).rejects.toEqual(INTERNAL_ERROR)
+    await expect(switchOrAppendNetwork(INPUT)).rejects.toEqual(INTERNAL_ERROR)
   })
   it("[Ether,Network,Token]:: resolves withState=SUCCESS", async () => {
     /**
