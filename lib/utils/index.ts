@@ -6,7 +6,7 @@ import internals from "./internals"
 const { withError, runIfMetamask, switchNetwork } = internals
 
 export { default as parse } from "./parse"
-
+export { default as getFIATValue } from "./getFIATValue"
 export const getMetamaskProvider = internals.getMetamaskProvider
 
 export const addEtherToken = ({
@@ -135,10 +135,12 @@ export const connectToMetamask = () => {
 }
 
 export const formatEther = (balance: number) => {
-  const result = balance < 0 ? balance.toPrecision(2) : balance.toFixed(3)
-  return `${parseFloat(result)}`
-}
-
-export const getFIATBalance = (balance, price) => {
-  return parseFloat((balance * price).toFixed(2))
+  const min = 1e-4
+  if (balance < min && balance > 0) {
+    return `${min}`
+  }
+  if (balance < 1) {
+    return `${balance}`
+  }
+  return `${parseFloat(balance.toFixed(4))}`
 }

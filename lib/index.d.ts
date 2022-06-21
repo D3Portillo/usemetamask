@@ -39,13 +39,16 @@ export function useMetamask(
 ): UseMatamaskAPI
 /**
  * Fetch token price in USD,JPY & EUR from CoinGecko public api
- * @param coinGeckoID API ID, like `bitcoin`
+ * @param coinGeckoID API ID, like "bitcoin"
  * @returns [{ usd, jpy, eur }, triggerReFetchFn]
+ * @example
+ * const [btcPrice, reFetchFn] = useTokenPrice("bitcoin")
+ * console.log(btcPrice.usd) // Math.random() * 45_000
  */
 export function useTokenPrice(
   coinGeckoID: string,
   refreshInternvalInSecs?: number
-): [FIATCurrencies, /** Triggers a re-fetch to the API */ VoidCallback]
+): [FIATCurrencies, VoidCallback]
 export function addEtherNetwork(props: AddEtherNetwork): Promise<null>
 export function addEtherToken(props: AddEtherToken): Promise<null>
 export function getMetamaskProvider(): Metamask | null
@@ -58,9 +61,21 @@ export function switchOrAppendNetwork(props: AddEtherNetwork): Promise<null>
 export function sendEther(props: SendMethodProps): Promise<string>
 export function connectToMetamask(): Promise<string>
 export function formatEther(balance: number): string
-export function getFIATBalance(
+/**
+ * Returns a formatted string with a token FIAT value
+ * @param tokenBalance The amount of tokens to calculate
+ * @param tokenPrice The current token price per unit
+ * @param currency The currency token price is matched to
+ * @example
+ * const amount = 12
+ * const priceInUSD = 200
+ * const formattedValue = getFIATValue(amount, priceInUSD) // "2,400"
+ */
+export function getFIATValue(
   tokenBalance: number | string,
-  tokenPrice: number
-): number
+  tokenPrice: number | string,
+  /** Define a currency for `tokenPrice`. Defaults to "USD" */
+  currency?: "USD" | "JPY" | "EUR"
+): string
 export const metamaskRequest: OnRequest["request"]
 export const parse: Parse

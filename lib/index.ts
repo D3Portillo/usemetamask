@@ -10,6 +10,6 @@ export {
   sendEther,
   parse,
   connectToMetamask,
-  getFIATBalance,
+  getFIATValue,
   formatEther,
 } from "./utils"
