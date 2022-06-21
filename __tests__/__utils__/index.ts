@@ -7,11 +7,12 @@ export const waitForUseEffect = async (node: RenderResult) => {
   })
 }
 
-export function exposeMetamask(metamaskMock: {
+export function exposeMetamask(metamaskMock?: {
   request?: Metamask["request"]
   on?: Metamask["on"]
   selectedAddress?: string
   isMetaMask?: boolean
+  _metamask?: {}
 }): Metamask {
   const metamask = {
     isConnected: false,
