@@ -7,7 +7,7 @@ const FORMATTERS = {
 const defaultFormatter = {
   format: (n) => {
     console.error(
-      "getFIATBalance:: Error, `currency` expects oneOf('USD','JPY','EUR')"
+      "getFIATValue:: Error, `currency` expects oneOf('USD','JPY','EUR')"
     )
     return `${n}`
   },
