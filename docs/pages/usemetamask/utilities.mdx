@@ -2,6 +2,8 @@
 title: "useMetamask:: Utilities"
 ---
 
+import Callout from "nextra-theme-docs/callout"
+
 ## addEtherNetwork
 
 ```jsx
@@ -103,3 +105,35 @@ metamaskRequest({
   method: "eth_requestAccounts",
 })
 ```
+
+## connectToMetamask
+
+Will request accounts to MetaMask and resolve with the connected account string.
+
+```jsx
+import { connectToMetamask } from "@forta/usemetamask"
+// ..
+
+connectToMetamask().then((account) => {
+  console.log(account)
+})
+```
+
+## getFIATValue
+
+Returns a formatted string with a token FIAT value.
+
+```jsx
+import { getFIATValue } from "@forta/usemetamask"
+// ..
+
+const tokenBalance = 1000
+const tokenPriceInUSD = 22.32
+// you can replace USD with EUR or JPY
+const balanceInUSD = getFIATValue(tokenBalance, tokenPriceInUSD, "USD") // 22,320
+```
+
+<Callout type="warning" emoji="⚠️">
+  Note: In versions before `0.2.0` the method was named getFIATBalance.
+  [See release notes](https://github.com/D3Portillo/usemetamask/releases/tag/v0.2.0)
+</Callout>
