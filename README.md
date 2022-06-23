@@ -24,13 +24,13 @@
   </a>
 </p>
 
-## Install
+## Installation
 
 ```bash
 npm i @forta/usemetamask
 ```
 
-## Get Started
+## Getting Started
 
 ```js
 import { useMetamask } from "@forta/usemetamask"
