@@ -1,0 +1,23 @@
+---
+title: Network Module
+---
+
+# Network Module
+
+**Network** is a forta module to get common/popular ether networks properties like chainId, rpcURL and explorer.
+
+## Installation
+
+```shell
+npm i -d @forta/network
+```
+
+## Getting Started
+
+```js
+mport { Rinkeby } from "@forta/network"
+
+const ADDRR = "0x6635f83421bf059cd8111f180f0727128685bae4"
+console.log(Rinkeby.getExplorerURL(ADDRR))
+// https://rinkeby.etherscan.io/address/0x6635f83421bf059cd8111f180f0727128685bae4
+```

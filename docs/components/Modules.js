@@ -2,6 +2,14 @@ import Link from "next/link"
 
 import ResponsiveTable from "./ResponsiveTable"
 
+const External = ({ href, children }) => {
+  return (
+    <a target="_blank" rel="noopener noreferrer" href={href}>
+      {children}
+    </a>
+  )
+}
+
 function Modules() {
   return (
     <ResponsiveTable>
@@ -20,23 +28,29 @@ function Modules() {
             </td>
             <td>React Hook</td>
             <td>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://www.npmjs.com/package/@forta/usemetamask"
-              >
-                NPM
-              </a>
+              <External href="https://www.npmjs.com/package/@forta/usemetamask">
+                npm
+              </External>
               {", "}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://github.com/D3Portillo/usemetamask/tree/master/lib"
-              >
-                CODE
-              </a>
+              <External href="https://github.com/D3Portillo/usemetamask/tree/master/lib">
+                repo
+              </External>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <Link href="/network">@forta/network</Link>
+            </td>
+            <td>Vanilla Package</td>
+            <td>
+              <External href="https://www.npmjs.com/package/@forta/network">
+                npm
+              </External>
               {", "}
-              <Link href="/usemetamask">DOCS</Link>
+              <External href="https://github.com/D3Portillo/forta/tree/master/packages/network">
+                repo
+              </External>
             </td>
           </tr>
         </tbody>
